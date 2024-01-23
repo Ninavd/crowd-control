@@ -13,10 +13,7 @@ class Cell:
         self.x = x
         self.y = y
         self.neighbors: list[Cell] = []  
-    
-    def is_populated(self):
-        return False if self.is_empty() else True
-    
+       
     def is_empty(self):
         return True if self.value == 0 else False
 
