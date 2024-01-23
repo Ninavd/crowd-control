@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt 
 import numpy as np 
+from numpy import ndarray
 import random 
 
 from classes.lattice import Lattice
@@ -10,14 +11,25 @@ get_value_array = np.vectorize(lambda cell: cell.value)
 class Simulation:
 
     def __init__(self, N, iters, corridor):
+        """
+        Initializes simulation object.
+        N (int)            - Total nr of people in the corridor.
+        iters (int)        - number of iterations to exectue
+        corridor (Lattice) - object representing the floor plan
+        populated_cells (ndarray[Cell]) - array of cell objects currently populated
+        """
         self.N = N
         self.iters = iters
         self.corridor : Lattice = corridor
         self.populate_corridor()
-        self.populated_cells : list[Cell] = self.corridor.get_populated_cells()
+        self.populated_cells : ndarray[Cell] = self.corridor.get_populated_cells()
     
     def populate_corridor(self):
+        """
+        Randomly assign equal parts left-moving and right-moving to the lattice.
+        """
         assert self.N <= self.corridor.cells.size, 'Number of people is larger than number of cells'
+        
         for _ in range(self.N):
             value = 1 if random.random() < 0.5 else -1
             self.populate_random_cell(value)
@@ -28,7 +40,7 @@ class Simulation:
         '''
         assert isinstance(value, int) and value in [-1, 1]
 
-        if cell.is_populated():
+        if not cell.is_empty():
             return False
         
         cell.populate(value)
@@ -44,11 +56,14 @@ class Simulation:
         return cell
 
     def iteration(self):
+        """
+        Execute one timestep of the CA.
+        """
         # decide next cell for all populated cells 
         next_cells = []
         for cell in self.populated_cells:
             best_neighbor = cell.get_best_neighbor()
-            # TODO: If two neighbors have same distance, pick a random oneals twee neighbors dezelfde value hebben, kies er random eentje
+            # TODO: If two neighbors have same distance, pick a random one
             # TODO: If two cells want to move to the same cell, choose randomly which one gets to move.
             if best_neighbor and best_neighbor not in next_cells:
                 next_cells.append(best_neighbor)
@@ -65,9 +80,14 @@ class Simulation:
         self.populated_cells = self.corridor.get_populated_cells()
 
     def run(self, animate=True):
+        """
+        Execute self.iters amount of timesteps.
+        Animate progress if animate is True.
+        """
         if animate:
             plt.figure()
             plt.ion()
+
         for _ in range(self.iters):
             # update all cells
             self.iteration()
