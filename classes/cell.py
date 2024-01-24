@@ -81,7 +81,7 @@ class Cell:
         # TODO: Choose center cell with high probability, diagonal cells with a lower one.
 
         # if no better cells, stay where you are
-        if minimum > current_distance:
+        if minimum >= current_distance:
             return None 
         
         # pick a random cell with lower distance
