@@ -49,18 +49,35 @@ class Cell:
         """
         return self.right_exit_distance if value > 0 else self.left_exit_distance
     
+    def get_empty_neighbors(self):
+        """
+        Return empty neighbors in array
+        """
+        empty_neighbors = []
+        for neighbor in self.neighbors:
+            if neighbor.is_empty():
+                empty_neighbors.append(neighbor)
+        return np.array(empty_neighbors)
+    
     def get_best_neighbor(self):
         """
         Find neighbor cell with smallest distance to the relevant exit.
         Only looks at empty cells for now. 
         """
+         # only consider empty neighbors
+        empty_neighbors = self.get_empty_neighbors()
+
+        # every neighbor is occupied
+        if len(empty_neighbors) == 0:
+            return None
+        
         # find distance values of all neighbors
-        distances = get_distance_array(self.neighbors, self.value)
+        distances = get_distance_array(empty_neighbors, self.value)
         
         minimum = distances.min()
         current_distance = self.get_distance_value(self.value)
 
-        # TODO: only check/return empty neighbors
+      
         # TODO: Choose center cell with high probability, diagonal cells with a lower one.
 
         # if no better cells, stay where you are
@@ -68,5 +85,25 @@ class Cell:
             return None 
         
         # pick a random cell with lower distance
-        best_index = random.choice(np.where(distances <= current_distance)[0])
-        return self.neighbors[best_index]
+        options = list(np.where(distances < current_distance)[0])
+            
+
+        if len(options) == 1:
+            return empty_neighbors[options[0]]
+
+        for index in options:
+            neighbor = empty_neighbors[index]
+
+            if neighbor.x == self.x:
+                
+                if random.random() < 0.8:
+                    return neighbor
+                
+                options.remove(index)
+                # np.delete(empty_neighbors, index)
+        
+        best_index = random.choice(options)
+        return empty_neighbors[best_index]
+    
+    
+    
