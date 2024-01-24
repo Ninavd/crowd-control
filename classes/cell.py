@@ -60,6 +60,9 @@ class Cell:
         minimum = distances.min()
         current_distance = self.get_distance_value(self.value)
 
+        # TODO: only check/return empty neighbors
+        # TODO: Choose center cell with high probability, diagonal cells with a lower one.
+
         # if no better cells, stay where you are
         if minimum > current_distance:
             return None 

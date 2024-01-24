@@ -62,6 +62,7 @@ class Simulation:
         # decide next cell for all populated cells 
         next_cells = []
         for cell in self.populated_cells:
+            
             best_neighbor = cell.get_best_neighbor()
             # TODO: If two neighbors have same distance, pick a random one
             # TODO: If two cells want to move to the same cell, choose randomly which one gets to move.

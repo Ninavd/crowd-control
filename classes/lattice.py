@@ -7,6 +7,9 @@ from helpers import get_neighbor_coords
 
 get_value_array = np.vectorize(lambda cell: cell.value)
 
+get_distance_array = lambda cell : round(cell.right_exit_distance)
+get_distance_array = np.vectorize(get_distance_array)
+
 class Lattice:
 
     def __init__(self, len_x, len_y) -> None:
@@ -26,8 +29,10 @@ class Lattice:
                 cell = Cell(
                     x,
                     y, 
-                    left_exit_distance  = math.dist([self.len_x // 2, 0], [x, y]), 
-                    right_exit_distance = math.dist([self.len_x // 2, self.len_y - 1], [x, y])
+                    left_exit_distance  = y,
+                    #math.dist([self.len_x // 2, 0], [x, y]), # TODO: do this in a correct way
+                    right_exit_distance = self.len_y - y 
+                    #math.dist([self.len_x // 2, self.len_y - 1], [x, y])
                     )
                 cells[x].append(cell)
 
@@ -60,4 +65,5 @@ class Lattice:
         return self.cells[get_value_array(self.cells) != 0]
 
     def __str__(self) -> str:
-        return f'{get_value_array(self.cells)}'
+        # return f'{get_value_array(self.cells)}'
+        return f'{get_distance_array(self.cells)}'
