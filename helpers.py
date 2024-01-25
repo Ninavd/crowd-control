@@ -20,10 +20,12 @@ def get_neighbor_coords(x, y, len_x, len_y):
             elif (x != x_pos or y != y_pos) and (0 <= x_pos < len_x) and (y_pos == len_y):
                 coor.append((x_pos, 0))
 
-    return coor '''[
-        (x_pos, y_pos) for x_pos in range(x-1, x+2)
-                       for y_pos in range(y-1, y+2)
-                        if  (x != x_pos or y != y_pos) and
-                            (0 <= x_pos < len_x) and
-                            (0 <= y_pos < len_y)'''
-            ]
+    return coor
+
+# return[
+#         (x_pos, y_pos) for x_pos in range(x-1, x+2)
+#                        for y_pos in range(y-1, y+2)
+#                         if  (x != x_pos or y != y_pos) and
+#                             (0 <= x_pos < len_x) and
+#                             (0 <= y_pos < len_y)]
+        
