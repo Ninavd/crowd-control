@@ -30,9 +30,7 @@ class Lattice:
                     x,
                     y, 
                     left_exit_distance  = y,
-                    #math.dist([self.len_x // 2, 0], [x, y]), # TODO: do this in a correct way
                     right_exit_distance = self.len_y - y 
-                    #math.dist([self.len_x // 2, self.len_y - 1], [x, y])
                     )
                 cells[x].append(cell)
 
@@ -59,16 +57,23 @@ class Lattice:
         return self.cells[random_x, random_y]
 
     def get_random_empty_edge_cell(self, y,x):
+        """
+        Find unpopulated cell on opposite edge around same row number. 
+        Return it if it exists, else None.
+        """
         x_list = [i for i in range(x-1, x+2)]
         random.shuffle(x_list)
 
         for x in x_list:
+            
+            # exception for corner cells
             try:
                 if self.cells[x, y].is_empty():
                     return self.cells[x, y] 
-            except IndexError:
-                None   
+            except IndexError: 
+                pass  
 
+        # no empty cell was found
         return None    
         
     def get_populated_cells(self):
