@@ -63,7 +63,15 @@ class Simulation:
         next_cells = []
         for cell in self.populated_cells:
             
-            best_neighbor = cell.get_best_neighbor()
+            if cell.y == 0 and cell.value == -1:
+                # random EMPTY edge cell with y=len_y - 1
+                best_neighbor = self.corridor.get_random_empty_edge_cell(y=self.corridor.len_y - 1)
+            elif cell.y == self.corridor.len_y - 1 and cell.value == 1:
+                # random EMPTY edge cell with y=0
+                best_neighbor = self.corridor.get_random_empty_edge_cell(y=0)
+            else:
+                best_neighbor = cell.get_best_neighbor()
+                
             # TODO: If two neighbors have same distance, pick a random one
             # TODO: If two cells want to move to the same cell, choose randomly which one gets to move.
             if best_neighbor and best_neighbor not in next_cells:
