@@ -1,12 +1,8 @@
 import numpy as np
 import random 
+
 from numpy import ndarray
-
-get_distance_array = lambda cell, value : cell.left_exit_distance if value < 0 else cell.right_exit_distance
-get_distance_array = np.vectorize(get_distance_array)
-
-is_empty_vectorized = lambda cell : cell.is_empty()
-is_empty_vectorized = np.vectorize(is_empty_vectorized)
+from helpers import get_distance_array, is_empty_vectorized
 
 class Cell:
 
@@ -24,17 +20,14 @@ class Cell:
         """
         return True if self.value == 0 else False
 
-    def populate(self, value) -> bool:
+    def populate(self, value) -> None:
         """
         Populate a cell if it is not empty.
         """
-        assert value in [-1, 1]
-
-        if self.value != 0:
-            return False
+        assert value in [-1, 1], 'value must be 1 or -1'
+        assert self.value == 0, 'can not populate un-empty cell'
         
         self.value = value
-        return True
     
     def clear(self) -> None:
         """

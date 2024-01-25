@@ -1,14 +1,9 @@
-import math 
 import numpy as np
 import random 
 
 from classes.cell import Cell 
-from helpers import get_neighbor_coords
+from helpers import get_neighbor_coords, get_value_array, get_distance_array
 
-get_value_array = np.vectorize(lambda cell: cell.value)
-
-get_distance_array = lambda cell : round(cell.right_exit_distance)
-get_distance_array = np.vectorize(get_distance_array)
 
 class Lattice:
 
@@ -56,7 +51,7 @@ class Lattice:
         random_y = random.randint(0, self.len_y - 1)
         return self.cells[random_x, random_y]
 
-    def get_random_empty_edge_cell(self, y,x):
+    def get_random_empty_edge_cell(self, y, x):
         """
         Find unpopulated cell on opposite edge around same row number. 
         Return it if it exists, else None.
@@ -84,4 +79,4 @@ class Lattice:
 
     def __str__(self) -> str:
         # return f'{get_value_array(self.cells)}'
-        return f'{get_distance_array(self.cells)}'
+        return f'{get_distance_array(self.cells, 1)}'

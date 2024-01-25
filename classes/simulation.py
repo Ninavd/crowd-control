@@ -5,8 +5,8 @@ import random
 
 from classes.lattice import Lattice
 from classes.cell import Cell
+from helpers import get_value_array
 
-get_value_array = np.vectorize(lambda cell: cell.value)
 
 class Simulation:
 
@@ -48,7 +48,7 @@ class Simulation:
     
     def populate_random_cell(self, value):
         """
-        Populate a random cell and return its position
+        Populate a random cell and return its position.
         """
         cell = self.corridor.get_random_cell()
         while not self.populate_cell(cell, value):
@@ -63,16 +63,14 @@ class Simulation:
         next_cells = []
         for cell in self.populated_cells:
             
+            # ensure periodic boundary conditions
             if cell.y == 0 and cell.value == -1:
-                # random EMPTY edge cell with y=len_y - 1
-                best_neighbor = self.corridor.get_random_empty_edge_cell(y=self.corridor.len_y - 1, x = cell.x)
+                best_neighbor = self.corridor.get_random_empty_edge_cell(y=self.corridor.len_y - 1, x=cell.x)
             elif cell.y == self.corridor.len_y - 1 and cell.value == 1:
-                # random EMPTY edge cell with y=0
                 best_neighbor = self.corridor.get_random_empty_edge_cell(y=0, x=cell.x)
             else:
                 best_neighbor = cell.get_best_neighbor()
                 
-            # TODO: If two neighbors have same distance, pick a random one
             # TODO: If two cells want to move to the same cell, choose randomly which one gets to move.
             if best_neighbor and best_neighbor not in next_cells:
                 next_cells.append(best_neighbor)
