@@ -65,10 +65,10 @@ class Simulation:
             
             if cell.y == 0 and cell.value == -1:
                 # random EMPTY edge cell with y=len_y - 1
-                best_neighbor = self.corridor.get_random_empty_edge_cell(y=self.corridor.len_y - 1)
+                best_neighbor = self.corridor.get_random_empty_edge_cell(y=self.corridor.len_y - 1, x = cell.x)
             elif cell.y == self.corridor.len_y - 1 and cell.value == 1:
                 # random EMPTY edge cell with y=0
-                best_neighbor = self.corridor.get_random_empty_edge_cell(y=0)
+                best_neighbor = self.corridor.get_random_empty_edge_cell(y=0, x=cell.x)
             else:
                 best_neighbor = cell.get_best_neighbor()
                 

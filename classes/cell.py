@@ -77,9 +77,6 @@ class Cell:
         minimum = distances.min()
         current_distance = self.get_distance_value(self.value)
 
-        if current_distance == 1:
-            return random.choice(empty_neighbors)
-        
         # TODO: Choose center cell with high probability, diagonal cells with a lower one.
 
         # if no better cells, stay where you are
@@ -98,7 +95,7 @@ class Cell:
 
             if neighbor.x == self.x:
                 
-                if random.random() < 0.8:
+                if random.random() < 0.5:
                     return neighbor
                 
                 options.remove(index)

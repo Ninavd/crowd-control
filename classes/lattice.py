@@ -58,13 +58,16 @@ class Lattice:
         random_y = random.randint(0, self.len_y - 1)
         return self.cells[random_x, random_y]
 
-    def get_random_empty_edge_cell(self, y):
-        x_list = [i for i in range(self.len_x)]
+    def get_random_empty_edge_cell(self, y,x):
+        x_list = [i for i in range(x-1, x+2)]
         random.shuffle(x_list)
 
         for x in x_list:
-            if self.cells[x, y].is_empty():
-                return self.cells[x, y]    
+            try:
+                if self.cells[x, y].is_empty():
+                    return self.cells[x, y] 
+            except IndexError:
+                None   
 
         return None    
         
