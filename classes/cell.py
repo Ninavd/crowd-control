@@ -4,6 +4,9 @@ import random
 get_distance_array = lambda cell, value : cell.left_exit_distance if value < 0 else cell.right_exit_distance
 get_distance_array = np.vectorize(get_distance_array)
 
+is_empty_vectorized = lambda cell : cell.is_empty()
+is_empty_vectorized = np.vectorize(is_empty_vectorized)
+
 class Cell:
 
     def __init__(self, x, y, left_exit_distance, right_exit_distance) -> None:
@@ -39,7 +42,7 @@ class Cell:
         """
         Add neighbouring cell object.
         """
-        assert len(self.neighbors) < 10, 'max number of neighbors exceeded.'
+        assert len(self.neighbors) < 9, 'max number of neighbors exceeded.'
 
         self.neighbors.append(cell)
 
@@ -53,18 +56,15 @@ class Cell:
         """
         Return empty neighbors in array
         """
-        empty_neighbors = []
-        for neighbor in self.neighbors:
-            if neighbor.is_empty():
-                empty_neighbors.append(neighbor)
-        return np.array(empty_neighbors)
+        boolean_array = is_empty_vectorized(self.neighbors)
+        return np.array(self.neighbors)[boolean_array]
     
     def get_best_neighbor(self):
         """
         Find neighbor cell with smallest distance to the relevant exit.
         Only looks at empty cells for now. 
         """
-         # only consider empty neighbors
+        # only consider empty neighbors
         empty_neighbors = self.get_empty_neighbors()
 
         # every neighbor is occupied
@@ -73,36 +73,30 @@ class Cell:
         
         # find distance values of all neighbors
         distances = get_distance_array(empty_neighbors, self.value)
-        
-        minimum = distances.min()
         current_distance = self.get_distance_value(self.value)
 
-        # TODO: Choose center cell with high probability, diagonal cells with a lower one.
-
         # if no better cells, stay where you are
-        if minimum >= current_distance:
+        if distances.min() >= current_distance:
             return None 
         
-        # pick a random cell with lower distance
-        options = list(np.where(distances < current_distance)[0])
-            
+        # only consider neighbors with smaller distance to exit
+        empty_neighbors = empty_neighbors[distances < current_distance]
 
-        if len(options) == 1:
-            return empty_neighbors[options[0]]
+        if len(empty_neighbors) == 1:
+            return empty_neighbors[0]
 
-        for index in options:
-            neighbor = empty_neighbors[index]
+        # check for horizontal neighbors, move there with given probability
+        for i, neighbor in enumerate(empty_neighbors):
 
             if neighbor.x == self.x:
                 
-                if random.random() < 0.5:
+                if random.random() < 0.8:
                     return neighbor
                 
-                options.remove(index)
-                # np.delete(empty_neighbors, index)
+                np.delete(empty_neighbors, i)
         
-        best_index = random.choice(options)
-        return empty_neighbors[best_index]
+        # otherwise target a diagonal cell
+        return random.choice(empty_neighbors)
     
     
     
