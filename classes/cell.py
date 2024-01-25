@@ -1,5 +1,6 @@
 import numpy as np
 import random 
+from numpy import ndarray
 
 get_distance_array = lambda cell, value : cell.left_exit_distance if value < 0 else cell.right_exit_distance
 get_distance_array = np.vectorize(get_distance_array)
@@ -17,10 +18,13 @@ class Cell:
         self.y = y
         self.neighbors: list[Cell] = []  
        
-    def is_empty(self):
+    def is_empty(self) -> bool:
+        """
+        Return True if cell is unpopulated, False otherwise.
+        """
         return True if self.value == 0 else False
 
-    def populate(self, value):
+    def populate(self, value) -> bool:
         """
         Populate a cell if it is not empty.
         """
@@ -32,13 +36,13 @@ class Cell:
         self.value = value
         return True
     
-    def clear(self):
+    def clear(self) -> None:
         """
         Empty the cell.
         """
         self.value = 0
     
-    def add_neighbor(self, cell):
+    def add_neighbor(self, cell) -> None:
         """
         Add neighbouring cell object.
         """
@@ -46,20 +50,20 @@ class Cell:
 
         self.neighbors.append(cell)
 
-    def get_distance_value(self, value):
+    def get_distance_value(self, value) -> int:
         """
         Get the correct distance value based on who is asking.
         """
         return self.right_exit_distance if value > 0 else self.left_exit_distance
     
-    def get_empty_neighbors(self):
+    def get_empty_neighbors(self) -> ndarray[object]:
         """
-        Return empty neighbors in array
+        Return empty neighbors in array.
         """
         boolean_array = is_empty_vectorized(self.neighbors)
         return np.array(self.neighbors)[boolean_array]
     
-    def get_best_neighbor(self):
+    def get_best_neighbor(self) -> object | None:
         """
         Find neighbor cell with smallest distance to the relevant exit.
         Only looks at empty cells for now. 
@@ -97,6 +101,4 @@ class Cell:
         
         # otherwise target a diagonal cell
         return random.choice(empty_neighbors)
-    
-    
     
