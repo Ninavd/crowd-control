@@ -98,11 +98,12 @@ class Simulation:
         # populate new cells and empty old ones.
         for new_cell_coords, old_cell in next_cells.items():
             value = old_cell.value
-            old_cell.clear()
             new_cell = self.corridor.cells[new_cell_coords]
-            new_cell.populate(value)
             if old_cell != new_cell: 
                 old_cell.lower_distance_to_exit()
+            old_cell.clear()    
+            new_cell.populate(value)
+            
 
 
         # update populated cells
@@ -115,16 +116,17 @@ class Simulation:
         """
         images = []
         if animate:
-            plt.figure()
+            plt.figure(figsize=(12, 5))
             plt.ion()
+
 
         sigma_values = []
         for i in range(self.iters):
             # update all cells
             self.iteration()
 
-            if animate:
-                plt.clf() 
+            if animate: 
+                plt.subplot(1,2,1)
                 snapshot = self.plot_snapshot()
                 images.append(snapshot)
                 plt.pause(0.005)
@@ -137,9 +139,16 @@ class Simulation:
                 if counter_left + counter_right > 0:
                     sigma += ((counter_left - counter_right)**2/(counter_left + counter_right))/self.N
             sigma_values.append(sigma)
+            
+            plt.subplot(1,2,2) if animate else None
+            plt.xlabel('iteration')
+            plt.ylabel('$\\tilde{\phi}$', fontsize=14)
+            plt.plot(list(range(i + 1)), sigma_values, 'k-')
+            plt.show()
+            plt.pause(0.005)
 
         plt.ioff() if animate else None
-        return images, sigma_values
+        return images
 
     def plot_snapshot(self):
         plt.imshow(get_value_array(self.corridor.cells), interpolation="nearest", origin="upper")
