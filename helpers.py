@@ -30,7 +30,7 @@ is_empty_vectorized = lambda cell : cell.is_empty()
 is_empty_vectorized = np.vectorize(is_empty_vectorized)
 
 
-def build_and_save_animation(data_frames, title):
+def build_and_save_animation(data_frames, title, iterations):
     """
     Animates list of 2D-arrays and saves to mp4.
     """
@@ -41,7 +41,7 @@ def build_and_save_animation(data_frames, title):
         im.set_data(data_frames[frame_number])
         return im,
 
-    anim = animation.FuncAnimation(fig, animate, frames=15, interval=200, blit=True) 
+    anim = animation.FuncAnimation(fig, animate, frames=iterations, interval=200, blit=True) 
     # fig.suptitle('Sine wave plot', fontsize=14) 
 
     # saving to m4 using ffmpeg writer 

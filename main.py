@@ -7,7 +7,7 @@ x_width = 50
 y_height = 50
 density = 0.1
 N = int(density*x_width*y_height)
-iterations = 2000
+iterations = 20
 Corridor = Lattice(x_width, y_height)
 
 simulation = Simulation(N, iterations, Corridor)
@@ -15,4 +15,4 @@ print(Corridor)
 
 data_frames = simulation.run(animate=True)
 
-build_and_save_animation(data_frames, title='test.mp4')
+build_and_save_animation(data_frames, f'test_rho_{density}', iterations)
