@@ -89,7 +89,7 @@ class Simulation:
             plt.ion()
             
         # phi_0 = np.mean(phi_randoms)
-        phi_0 = calculate_phi_0(self.corridor.len_x, self.corridor.len_y, self.N, self.iters)
+        phi_0 = calculate_phi_0(self.corridor.len_x, self.corridor.len_y, self.N)
         print(phi_0)
         phi_values = np.zeros(self.iters)
 
