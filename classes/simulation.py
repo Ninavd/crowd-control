@@ -101,7 +101,8 @@ class Simulation:
             old_cell.clear()
             new_cell = self.corridor.cells[new_cell_coords]
             new_cell.populate(value)
-            new_cell.lower_distance_to_exit()
+            if old_cell != new_cell: 
+                old_cell.lower_distance_to_exit()
 
 
         # update populated cells
@@ -116,7 +117,7 @@ class Simulation:
         if animate:
             plt.figure()
             plt.ion()
-
+        Sigma_values = []
         for i in range(self.iters):
             # update all cells
             self.iteration()
@@ -127,11 +128,24 @@ class Simulation:
                 images.append(snapshot)
                 plt.pause(0.005)
 
+            value_array = get_value_array(self.corridor.cells)
+            Sigma = 0
+            for row in range(self.corridor.len_x):
+                counter_left = np.count_nonzero(value_array[row] == -1)
+                counter_right = np.count_nonzero(value_array[row] == 1)
+                if counter_left + counter_right > 0:
+                    Sigma += ((counter_left - counter_right)**2/(counter_left + counter_right))/self.N
+            Sigma_values.append(Sigma)
+
+        plt.plot(np.linspace(1, 2000, 2000), Sigma_values)
+        plt.show()
+
         plt.ioff() if animate else None
         return images
+
+        
 
     def plot_snapshot(self):
         plt.imshow(get_value_array(self.corridor.cells), interpolation="nearest", origin="upper")
         plt.colorbar()
         plt.show()
-        return get_value_array(self.corridor.cells)

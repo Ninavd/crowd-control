@@ -5,7 +5,7 @@ from helpers import build_and_save_animation
 
 x_width = 50
 y_height = 50
-density = 0.1
+density = 0.002
 N = int(density*x_width*y_height)
 iterations = 20
 Corridor = Lattice(x_width, y_height)
