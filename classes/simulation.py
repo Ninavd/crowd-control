@@ -101,6 +101,8 @@ class Simulation:
             old_cell.clear()
             new_cell = self.corridor.cells[new_cell_coords]
             new_cell.populate(value)
+            new_cell.lower_distance_to_exit()
+
 
         # update populated cells
         self.populated_cells = self.corridor.get_populated_cells()

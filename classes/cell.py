@@ -93,5 +93,18 @@ class Cell:
                 np.delete(empty_neighbors, i)
         
         # otherwise target a diagonal cell
-        return random.choice(empty_neighbors)
+        return np.random.choice(empty_neighbors)
     
+    def lower_distance_to_exit(self):
+        '''
+        This function lowers the value of the distance to the exit
+        In an effort to create a dynamic floorplan in which
+        people prefer behind someone else because the probability
+        of collisions is lower.
+        '''
+        if self.is_empty() == 0 and self.value < 0:
+            self.left_exit_distance += -0.00001
+
+        if self.is_empty() == 0 and self.value > 0:
+            self.right_exit_distance += -0.00001
+

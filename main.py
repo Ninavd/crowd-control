@@ -3,9 +3,14 @@ from classes.simulation import Simulation
 from helpers import build_and_save_animation
 
 
-Corridor = Lattice(50, 50)
+x_width = 50
+y_height = 50
+density = 0.1
+N = int(density*x_width*y_height)
+iterations = 2000
+Corridor = Lattice(x_width, y_height)
 
-simulation = Simulation(200, 15, Corridor)
+simulation = Simulation(N, iterations, Corridor)
 print(Corridor)
 
 data_frames = simulation.run(animate=True)
