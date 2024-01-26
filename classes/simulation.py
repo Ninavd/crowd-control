@@ -137,15 +137,14 @@ class Simulation:
                     Sigma += ((counter_left - counter_right)**2/(counter_left + counter_right))/self.N
             Sigma_values.append(Sigma)
 
-        plt.plot(np.linspace(1, 2000, 2000), Sigma_values)
+        plt.plot(np.linspace(1, self.iters, self.iters), Sigma_values)
         plt.show()
 
         plt.ioff() if animate else None
         return images
 
-        
-
     def plot_snapshot(self):
         plt.imshow(get_value_array(self.corridor.cells), interpolation="nearest", origin="upper")
         plt.colorbar()
         plt.show()
+        return get_value_array(self.corridor.cells)
