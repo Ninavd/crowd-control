@@ -80,3 +80,34 @@ class Lattice:
     def __str__(self) -> str:
         # return f'{get_value_array(self.cells)}'
         return f'{get_distance_array(self.cells, 1)}'
+    
+    def populate_corridor(self, N):
+        """
+        Randomly assign equal parts left-moving and right-moving to the lattice.
+        """
+        assert N <= self.cells.size, 'Number of people is larger than number of cells'
+        
+        for _ in range(N):
+            value = 1 if random.random() < 0.5 else -1
+            self.populate_random_cell(value)
+
+    def populate_random_cell(self, value):
+        """
+        Populate a random cell and return its position.
+        """
+        cell = self.get_random_cell()
+        while not self.populate_cell(cell, value):
+            cell = self.get_random_cell()
+        return cell
+    
+    def populate_cell(self, cell, value):
+        '''
+        Populate cell with a left or right-moving individual if it is empty.
+        '''
+        assert isinstance(value, int) and value in [-1, 1]
+
+        if not cell.is_empty():
+            return False
+        
+        cell.populate(value)
+        return True

@@ -21,40 +21,9 @@ class Simulation:
         self.N = N
         self.iters = iters
         self.corridor : Lattice = corridor
-        self.populate_corridor()
+        self.corridor.populate_corridor(N)
         self.populated_cells : ndarray[Cell] = self.corridor.get_populated_cells()
     
-    def populate_corridor(self):
-        """
-        Randomly assign equal parts left-moving and right-moving to the lattice.
-        """
-        assert self.N <= self.corridor.cells.size, 'Number of people is larger than number of cells'
-        
-        for _ in range(self.N):
-            value = 1 if random.random() < 0.5 else -1
-            self.populate_random_cell(value)
-
-    def populate_cell(self, cell, value):
-        '''
-        Populate cell with a left or right-moving individual if it is empty.
-        '''
-        assert isinstance(value, int) and value in [-1, 1]
-
-        if not cell.is_empty():
-            return False
-        
-        cell.populate(value)
-        return True
-    
-    def populate_random_cell(self, value):
-        """
-        Populate a random cell and return its position.
-        """
-        cell = self.corridor.get_random_cell()
-        while not self.populate_cell(cell, value):
-            cell = self.corridor.get_random_cell()
-        return cell
-
     def iteration(self):
         """
         Execute one timestep of the CA.
@@ -118,9 +87,12 @@ class Simulation:
         if animate:
             plt.figure(figsize=(12, 5))
             plt.ion()
+            
+        # phi_0 = np.mean(phi_randoms)
+        phi_0 = calculate_phi_0(self.corridor.len_x, self.corridor.len_y, self.N, self.iters)
+        print(phi_0)
+        phi_values = np.zeros(self.iters)
 
-
-        sigma_values = []
         for i in range(self.iters):
             # update all cells
             self.iteration()
@@ -131,27 +103,45 @@ class Simulation:
                 images.append(snapshot)
                 plt.pause(0.005)
 
-            value_array = get_value_array(self.corridor.cells)
-            sigma = 0
-            for row in range(self.corridor.len_x):
-                counter_left = np.count_nonzero(value_array[row] == -1)
-                counter_right = np.count_nonzero(value_array[row] == 1)
-                if counter_left + counter_right > 0:
-                    sigma += ((counter_left - counter_right)**2/(counter_left + counter_right))/self.N
-            sigma_values.append(sigma)
             
+            phi = calculate_lane_formation(self.corridor, self.N)
+            phi_reduced = (phi-phi_0)/(1-phi_0)
+            phi_values[i] = phi_reduced
+            
+            # plt.plot(np.linspace(1,self.iters,self.iters),phi_values)
+            # plt.show()
             plt.subplot(1,2,2) if animate else None
             plt.xlabel('iteration')
             plt.ylabel('$\\tilde{\phi}$', fontsize=14)
-            plt.plot(list(range(i + 1)), sigma_values, 'k-')
+            plt.plot(list(range(i + 1)), phi_values[0:i+1], 'k-')
             plt.show()
             plt.pause(0.005)
 
         plt.ioff() if animate else None
         return images
-
+    
     def plot_snapshot(self):
         plt.imshow(get_value_array(self.corridor.cells), interpolation="nearest", origin="upper")
         plt.colorbar()
         plt.show()
         return get_value_array(self.corridor.cells)
+
+def calculate_phi_0(len_x, len_y, N):
+    phi_randoms = np.zeros(100)
+    for j in range(0,100):
+        corridor = Lattice(len_x, len_y)
+        corridor.populate_corridor(N)
+        phi_randoms[j] = calculate_lane_formation(corridor, N)
+    phi_0 = np.mean(phi_randoms)
+    return phi_0
+
+
+def calculate_lane_formation(corridor, N):
+    phi = 0
+    value_array = get_value_array(corridor.cells)
+    for row in range(corridor.len_x):
+        counter_left = np.count_nonzero(value_array[row] == -1)
+        counter_right = np.count_nonzero(value_array[row] == 1)
+        if counter_left + counter_right > 0:
+            phi += ((counter_left - counter_right)**2/(counter_left + counter_right))/N
+    return phi

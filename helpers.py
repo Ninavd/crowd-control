@@ -3,6 +3,7 @@ from matplotlib import pyplot as plt
 import numpy as np 
 import matplotlib.animation as animation
 
+
 def get_neighbor_coords(x, y, len_x, len_y):
     """"
     Returns list of valid neighbor coordinates in a 2D-array.
@@ -48,3 +49,5 @@ def build_and_save_animation(data_frames, title, iterations):
     writervideo = animation.FFMpegWriter(fps=5) 
     anim.save(f'simulation_videos/{title}.mp4', writer=writervideo) 
     plt.close()
+
+
