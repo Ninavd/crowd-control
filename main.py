@@ -1,9 +1,14 @@
 from classes.lattice import Lattice
 from classes.simulation import Simulation
 
-Corridor = Lattice(40, 100)
+x_width = 50
+y_height = 50
+density = 0.1
+N = int(density*x_width*y_height)
+iterations = 2000
+Corridor = Lattice(x_width, y_height)
 
-simulation = Simulation(300, 1000, Corridor)
+simulation = Simulation(N, iterations, Corridor)
 print(Corridor)
 # simulation.plot_snapshot()
 
