@@ -110,22 +110,26 @@ class Simulation:
         Execute self.iters amount of timesteps.
         Animate progress if animate is True.
         """
+        images = []
         if animate:
             plt.figure()
             plt.ion()
 
-        for _ in range(self.iters):
+        for i in range(self.iters):
             # update all cells
             self.iteration()
 
             if animate:
                 plt.clf() 
-                self.plot_snapshot()
+                snapshot = self.plot_snapshot()
+                images.append(snapshot)
                 plt.pause(0.005)
 
         plt.ioff() if animate else None
+        return images
 
     def plot_snapshot(self):
         plt.imshow(get_value_array(self.corridor.cells), interpolation="nearest", origin="upper")
         plt.colorbar()
         plt.show()
+        return get_value_array(self.corridor.cells)
