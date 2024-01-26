@@ -93,5 +93,5 @@ class Cell:
                 np.delete(empty_neighbors, i)
         
         # otherwise target a diagonal cell
-        return random.choice(empty_neighbors)
+        return np.random.choice(empty_neighbors)
     
