@@ -59,8 +59,10 @@ class Simulation:
         """
         Execute one timestep of the CA.
         """
+        # key = tuple with coords of targeted cell, value is old_cell(s)
+        next_cells = {} 
+
         # decide next cell for all populated cells 
-        next_cells = []
         for cell in self.populated_cells:
             
             # ensure periodic boundary conditions
@@ -70,17 +72,34 @@ class Simulation:
                 best_neighbor = self.corridor.get_random_empty_edge_cell(y=0, x=cell.x)
             else:
                 best_neighbor = cell.get_best_neighbor()
-                
-            # TODO: If two cells want to move to the same cell, choose randomly which one gets to move.
-            if best_neighbor and best_neighbor not in next_cells:
-                next_cells.append(best_neighbor)
+            
+            # pair current cell to a target cell
+            if best_neighbor and (best_neighbor.x, best_neighbor.y) not in next_cells: 
+                next_cells[(best_neighbor.x, best_neighbor.y)] = [cell]
+            elif best_neighbor:
+                next_cells[(best_neighbor.x, best_neighbor.y)].append(cell)
             else:
-                next_cells.append(cell)
+                next_cells[((cell.x, cell.y))] = [cell] 
+        
+        # If multiple cells target the same cell, choose randomly which one gets to move.
+        current_keys = list(next_cells.keys())
+        for key in current_keys:
+            candidates = next_cells[key]
+
+            if len(candidates) == 1:
+                next_cells[key] = candidates[0]
+            else:
+                for _ in range(len(candidates) - 2):
+                    loser = candidates.pop(random.randint(0, len(candidates) - 1))
+                    next_cells[(loser.x, loser.y)] = loser
+                winner = candidates[0]
+                next_cells[key] = winner
 
         # populate new cells and empty old ones.
-        for old_cell, new_cell in zip(self.populated_cells, next_cells):
+        for new_cell_coords, old_cell in next_cells.items():
             value = old_cell.value
             old_cell.clear()
+            new_cell = self.corridor.cells[new_cell_coords]
             new_cell.populate(value)
 
         # update populated cells
