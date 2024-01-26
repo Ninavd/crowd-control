@@ -117,7 +117,8 @@ class Simulation:
         if animate:
             plt.figure()
             plt.ion()
-        Sigma_values = []
+
+        sigma_values = []
         for i in range(self.iters):
             # update all cells
             self.iteration()
@@ -129,19 +130,16 @@ class Simulation:
                 plt.pause(0.005)
 
             value_array = get_value_array(self.corridor.cells)
-            Sigma = 0
+            sigma = 0
             for row in range(self.corridor.len_x):
                 counter_left = np.count_nonzero(value_array[row] == -1)
                 counter_right = np.count_nonzero(value_array[row] == 1)
                 if counter_left + counter_right > 0:
-                    Sigma += ((counter_left - counter_right)**2/(counter_left + counter_right))/self.N
-            Sigma_values.append(Sigma)
-
-        plt.plot(np.linspace(1, self.iters, self.iters), Sigma_values)
-        plt.show()
+                    sigma += ((counter_left - counter_right)**2/(counter_left + counter_right))/self.N
+            sigma_values.append(sigma)
 
         plt.ioff() if animate else None
-        return images
+        return images, sigma_values
 
     def plot_snapshot(self):
         plt.imshow(get_value_array(self.corridor.cells), interpolation="nearest", origin="upper")
