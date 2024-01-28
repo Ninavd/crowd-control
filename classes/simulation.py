@@ -129,12 +129,14 @@ class Simulation:
             phi = calculate_lane_formation(self.corridor, self.N)
             phi_reduced = (phi-phi_0)/(1-phi_0)
             phi_values[i] = phi_reduced
+            
+            if save_video == True:
+                images.append(get_value_array(self.corridor.cells))
 
             if animate: 
                 # plot lattice
                 plt.subplot(1,2,1)
-                snapshot = self.plot_snapshot(colorbar=False)
-                images.append(snapshot) if save_video == True else None
+                self.plot_snapshot(colorbar=False)
 
                 # plot phi evolution
                 plt.subplot(1,2,2) if animate else None
@@ -153,7 +155,6 @@ class Simulation:
         plt.imshow(get_value_array(self.corridor.cells), interpolation="nearest", origin="upper")
         plt.colorbar() if colorbar == True else None
         plt.show()
-        return get_value_array(self.corridor.cells)
 
 def calculate_phi_0(len_x, len_y, N):
     phi_randoms = np.zeros(100)
