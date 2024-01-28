@@ -3,6 +3,7 @@ import numpy as np
 from numpy import ndarray
 from collections import defaultdict
 import random 
+import copy
 
 from classes.lattice import Lattice
 from classes.cell import Cell
@@ -11,7 +12,7 @@ from helpers import get_value_array
 
 class Simulation:
 
-    def __init__(self, N, iters, corridor):
+    def __init__(self, iters, corridor):
         """
         Initializes simulation object.
         N (int)            - Total nr of people in the corridor.
@@ -19,10 +20,10 @@ class Simulation:
         corridor (Lattice) - object representing the floor plan
         populated_cells (ndarray[Cell]) - array of cell objects currently populated
         """
-        self.N = N
+        self.N = len(corridor.get_populated_cells())
         self.iters = iters
-        self.corridor : Lattice = corridor
-        self.corridor.populate_corridor(N)
+        self.corridor : Lattice = copy.deepcopy(corridor)
+        self.corridor.load_neighbours()
         self.populated_cells : ndarray[Cell] = self.corridor.get_populated_cells()
     
     def find_target_cell(self, cell: Cell) -> Cell | None:

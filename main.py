@@ -1,22 +1,21 @@
-import matplotlib.pyplot as plt
 import numpy as np
+import scipy.stats as stats
+import pandas as pd
 
 from classes.lattice import Lattice
 from classes.simulation import Simulation
 from helpers import build_and_save_animation
-import scipy.stats as stats
-import pandas as pd
-
 
 x_width = 50
 y_height = 50
 density = 0.12
-N = int(density*x_width*y_height)
+N = int(density * x_width * y_height)
 iterations = 500
-Corridor = Lattice(x_width, y_height)
 
-simulation = Simulation(N, iterations, Corridor)
-print(Corridor)
+Corridor = Lattice(x_width, y_height)
+Corridor.populate_corridor(N)
+
+simulation = Simulation(iterations, Corridor)
 
 data_frames, phi_values = simulation.run(animate=False)
 
@@ -27,8 +26,7 @@ def datacsv(it,output_file):
     results = []
     all_phi = []
     for _ in range(it):
-        Corridor = Lattice(x_width, y_height)
-        simulation = Simulation(N, iterations, Corridor)
+        simulation = Simulation(iterations, Corridor)
         _, phi_values = simulation.run(animate=True)
         all_phi.append(phi_values)
 

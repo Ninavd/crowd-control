@@ -4,7 +4,6 @@ import random
 from classes.cell import Cell 
 from helpers import get_neighbor_coords, get_value_array, get_distance_array
 
-
 class Lattice:
 
     def __init__(self, len_x, len_y) -> None:
@@ -12,7 +11,7 @@ class Lattice:
         self.len_y = len_y
         self.cells = self.initialize_grid()
         self.n_cells = len_x * len_y
-        self.load_neighbours()
+        # self.load_neighbours()
 
     def initialize_grid(self):
         '''
@@ -77,10 +76,6 @@ class Lattice:
         """
         return self.cells[get_value_array(self.cells) != 0]
 
-    def __str__(self) -> str:
-        # return f'{get_value_array(self.cells)}'
-        return f'{get_distance_array(self.cells, 1)}'
-    
     def populate_corridor(self, N):
         """
         Randomly assign equal parts left-moving and right-moving to the lattice.
@@ -111,3 +106,7 @@ class Lattice:
         
         cell.populate(value)
         return True
+    
+    def __str__(self) -> str:
+        # return f'{get_value_array(self.cells)}'
+        return f'{get_distance_array(self.cells, 1)}'
