@@ -117,7 +117,7 @@ class Simulation:
             plt.ion()
             
         phi_0 = calculate_phi_0(self.corridor.len_x, self.corridor.len_y, self.N)
-        print(phi_0)
+        print('phi_0: ', phi_0)
         phi_values = np.zeros(self.iters)
 
         for i in range(self.iters):
@@ -140,7 +140,7 @@ class Simulation:
                 self.plot_snapshot(colorbar=False)
 
                 # plot phi evolution
-                plt.subplot(1,2,2) if animate else None
+                plt.subplot(1,2,2)
                 plt.xlabel('iteration')
                 plt.ylabel('$\\tilde{\phi}$', fontsize=14)
                 plt.plot(list(range(i + 1)), phi_values[0:i+1], 'k-')
@@ -156,6 +156,21 @@ class Simulation:
         plt.imshow(get_value_array(self.corridor.cells), interpolation="nearest", origin="upper")
         plt.colorbar() if colorbar == True else None
         plt.show()
+    
+    def plot_results(self, phi_values, save=False):
+        plt.figure(figsize=(12, 5))
+        plt.subplot(121)
+        plt.imshow(get_value_array(self.corridor.cells), interpolation="nearest", origin="upper")
+        plt.colorbar() 
+
+        plt.subplot(122)
+        plt.xlabel('iteration')
+        plt.ylabel('$\\tilde{\phi}$', fontsize=14)
+        plt.plot(list(range(len(phi_values))), phi_values, 'k-')
+
+        if save:
+            density = self.N / (self.corridor.len_x * self.corridor.len_y)
+            plt.savefig(f'./results/L_{self.corridor.len_x}_rho_{density}.png')
 
 def calculate_phi_0(len_x, len_y, N):
     phi_randoms = np.zeros(100)
