@@ -397,4 +397,5 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
-.simulation_videos/*
+# Folder with videos of simulation results
+simulation_videos/
