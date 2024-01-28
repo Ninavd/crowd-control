@@ -118,7 +118,7 @@ class Simulation:
             plt.pause(0.005)
 
         plt.ioff() if animate else None
-        return images
+        return images, phi_values
     
     def plot_snapshot(self):
         plt.imshow(get_value_array(self.corridor.cells), interpolation="nearest", origin="upper")
@@ -145,3 +145,4 @@ def calculate_lane_formation(corridor, N):
         if counter_left + counter_right > 0:
             phi += ((counter_left - counter_right)**2/(counter_left + counter_right))/N
     return phi
+
