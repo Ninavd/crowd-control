@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt 
 import numpy as np 
 from numpy import ndarray
+from collections import defaultdict
 import random 
 
 from classes.lattice import Lattice
@@ -24,61 +25,87 @@ class Simulation:
         self.corridor.populate_corridor(N)
         self.populated_cells : ndarray[Cell] = self.corridor.get_populated_cells()
     
+    def find_target_cell(self, cell: Cell) -> Cell | None:
+        """
+        Finds the target cell for a given cell while considering boundary conditions.
+        Returns None if no target available.
+        """
+        # check periodic boundary conditions
+        if cell.is_leaving_left():
+            new_y = self.corridor.len_y - 1
+            return self.corridor.get_random_empty_edge_cell(new_y, x=cell.x)
+        elif cell.is_leaving_right(self.corridor.len_y):
+            return self.corridor.get_random_empty_edge_cell(y=0, x=cell.x)
+        
+        # cell is not a boundary cell
+        return cell.get_best_neighbor()
+
+    def resolve_conflicts(self, next_cells):
+        """
+        Resolve conflicts in the next_cells dictionary.
+        If cell targeted by multiple cells, random one wins, others stay put.
+        """
+        targets = list(next_cells.keys())
+        cell_assigned = {}
+
+        for target in targets:
+            candidates = next_cells[target]
+
+            if len(candidates) == 1:
+                cell_assigned[target] = candidates[0]
+            else:
+                for _ in range(len(candidates) - 2):
+                    loser = candidates.pop(random.randint(0, len(candidates) - 1))
+                    cell_assigned[(loser.x, loser.y)] = loser
+                    
+                winner = candidates[0]
+                cell_assigned[target] = winner
+        
+        return cell_assigned
+    
+    def execute_timestep(self, next_cells):
+        """
+        Populate new cells and empty old ones.
+        Adjust distance value of visited cells.
+        """
+        for new_cell_coords, old_cell in next_cells.items():
+            value = old_cell.value
+            new_cell = self.corridor.cells[new_cell_coords]
+            
+            if old_cell != new_cell: 
+                old_cell.lower_distance_to_exit()
+            
+            old_cell.clear()    
+            new_cell.populate(value)
+
     def iteration(self):
         """
-        Execute one timestep of the CA.
+        Execute one iteration of the CA.
         """
         # key = tuple with coords of targeted cell, value is old_cell(s)
-        next_cells = {} 
+        next_cells = defaultdict(list) 
 
         # decide next cell for all populated cells 
         for cell in self.populated_cells:
             
-            # ensure periodic boundary conditions
-            if cell.y == 0 and cell.value == -1:
-                best_neighbor = self.corridor.get_random_empty_edge_cell(y=self.corridor.len_y - 1, x=cell.x)
-            elif cell.y == self.corridor.len_y - 1 and cell.value == 1:
-                best_neighbor = self.corridor.get_random_empty_edge_cell(y=0, x=cell.x)
-            else:
-                best_neighbor = cell.get_best_neighbor()
+            target_cell = self.find_target_cell(cell)
             
-            # pair current cell to a target cell
-            if best_neighbor and (best_neighbor.x, best_neighbor.y) not in next_cells: 
-                next_cells[(best_neighbor.x, best_neighbor.y)] = [cell]
-            elif best_neighbor:
-                next_cells[(best_neighbor.x, best_neighbor.y)].append(cell)
+            # save targeted cells
+            if target_cell: 
+                next_cells[(target_cell.x, target_cell.y)].append(cell)
             else:
                 next_cells[((cell.x, cell.y))] = [cell] 
         
-        # If multiple cells target the same cell, choose randomly which one gets to move.
-        current_keys = list(next_cells.keys())
-        for key in current_keys:
-            candidates = next_cells[key]
+        # solve conflicts where cell is targeted by multiple cells
+        next_cells = self.resolve_conflicts(next_cells)
 
-            if len(candidates) == 1:
-                next_cells[key] = candidates[0]
-            else:
-                for _ in range(len(candidates) - 2):
-                    loser = candidates.pop(random.randint(0, len(candidates) - 1))
-                    next_cells[(loser.x, loser.y)] = loser
-                winner = candidates[0]
-                next_cells[key] = winner
-
-        # populate new cells and empty old ones.
-        for new_cell_coords, old_cell in next_cells.items():
-            value = old_cell.value
-            new_cell = self.corridor.cells[new_cell_coords]
-            if old_cell != new_cell: 
-                old_cell.lower_distance_to_exit()
-            old_cell.clear()    
-            new_cell.populate(value)
-            
-
-
+        # populate new cells and empty old ones
+        self.execute_timestep(next_cells)
+        
         # update populated cells
         self.populated_cells = self.corridor.get_populated_cells()
 
-    def run(self, animate=True):
+    def run(self, animate=True, save_video=True, print_progress=True):
         """
         Execute self.iters amount of timesteps.
         Animate progress if animate is True.
@@ -88,41 +115,43 @@ class Simulation:
             plt.figure(figsize=(12, 5))
             plt.ion()
             
-        # phi_0 = np.mean(phi_randoms)
         phi_0 = calculate_phi_0(self.corridor.len_x, self.corridor.len_y, self.N)
         print(phi_0)
         phi_values = np.zeros(self.iters)
 
         for i in range(self.iters):
+            
+            print(f'iteration {i+1}/{self.iters}     ', end='\r') if print_progress else None
+
             # update all cells
             self.iteration()
 
-            if animate: 
-                plt.subplot(1,2,1)
-                snapshot = self.plot_snapshot()
-                images.append(snapshot)
-                plt.pause(0.005)
-
-            
             phi = calculate_lane_formation(self.corridor, self.N)
             phi_reduced = (phi-phi_0)/(1-phi_0)
             phi_values[i] = phi_reduced
-            
-            # plt.plot(np.linspace(1,self.iters,self.iters),phi_values)
-            # plt.show()
-            plt.subplot(1,2,2) if animate else None
-            plt.xlabel('iteration')
-            plt.ylabel('$\\tilde{\phi}$', fontsize=14)
-            plt.plot(list(range(i + 1)), phi_values[0:i+1], 'k-')
-            plt.show()
-            plt.pause(0.005)
+
+            if animate: 
+                # plot lattice
+                plt.subplot(1,2,1)
+                snapshot = self.plot_snapshot(colorbar=False)
+                images.append(snapshot) if save_video == True else None
+
+                # plot phi evolution
+                plt.subplot(1,2,2) if animate else None
+                plt.xlabel('iteration')
+                plt.ylabel('$\\tilde{\phi}$', fontsize=14)
+                plt.plot(list(range(i + 1)), phi_values[0:i+1], 'k-')
+                plt.pause(0.005)
+                plt.clf()
 
         plt.ioff() if animate else None
+
+        assert len(self.corridor.get_populated_cells()) == self.N, 'Density has changed'
         return images, phi_values
     
-    def plot_snapshot(self):
+    def plot_snapshot(self, colorbar=True):
         plt.imshow(get_value_array(self.corridor.cells), interpolation="nearest", origin="upper")
-        plt.colorbar()
+        plt.colorbar() if colorbar == True else None
         plt.show()
         return get_value_array(self.corridor.cells)
 

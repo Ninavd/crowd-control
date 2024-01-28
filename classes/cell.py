@@ -20,6 +20,18 @@ class Cell:
         """
         return True if self.value == 0 else False
 
+    def is_leaving_left(self):
+        """
+        Returns True if agent is about to leave lattice on the left.
+        """
+        return self.y == 0 and self.value == -1
+
+    def is_leaving_right(self, len_y):
+        """
+        Returns True if agent is about to leave lattice on the right.
+        """
+        return self.y == len_y - 1 and self.value == 1
+
     def populate(self, value) -> None:
         """
         Populate a cell if it is not empty.
@@ -102,9 +114,8 @@ class Cell:
         people prefer behind someone else because the probability
         of collisions is lower.
         '''
-        if self.is_empty() == 0 and self.value < 0:
+        if self.value < 0:
             self.left_exit_distance += -0.00001
 
-        if self.is_empty() == 0 and self.value > 0:
+        elif self.value > 0:
             self.right_exit_distance += -0.00001
-

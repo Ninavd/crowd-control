@@ -10,15 +10,15 @@ import pandas as pd
 
 x_width = 50
 y_height = 50
-density = 0.1
+density = 0.12
 N = int(density*x_width*y_height)
-iterations = 15
+iterations = 500
 Corridor = Lattice(x_width, y_height)
 
 simulation = Simulation(N, iterations, Corridor)
 print(Corridor)
 
-data_frames, phi_values = simulation.run(animate=True)
+data_frames, phi_values = simulation.run(animate=False)
 
 build_and_save_animation(data_frames, f'test_rho_{density}', iterations)
 
@@ -27,6 +27,8 @@ def datacsv(it,output_file):
     results = []
     all_phi = []
     for _ in range(it):
+        Corridor = Lattice(x_width, y_height)
+        simulation = Simulation(N, iterations, Corridor)
         _, phi_values = simulation.run(animate=True)
         all_phi.append(phi_values)
 
