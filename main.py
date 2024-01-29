@@ -29,23 +29,7 @@ def main(density, iterations, runs, L, animate, save_video, save_results):
             df.to_csv(output_file)
             print(f"Results written to {output_file}")
 
-    # def datacsv(it,output_file):
-    #     results = []
-    #     all_phi = []
-    #     for _ in range(it):
-    #         simulation = Simulation(iterations, corridor)
-    #         _, phi_values = simulation.run(animate=True)
-    #         all_phi.append(phi_values)
 
-    #     mean_phi = np.mean(all_phi, axis = 0)
-    #     variance_phi = np.var(all_phi, axis = 0, ddof=1)
-    #     df_results = pd.DataFrame({'mean_phi': mean_phi, 'variance': variance_phi})
-    #     df_results.to_csv(output_file)
-    #     print(f"Results written to {output_file}")
-
-    # it_analyze = 2
-    # output_file = "simulation_results.csv"
-    # datacsv(it_analyze,output_file)
         
 if __name__ == '__main__':
 
