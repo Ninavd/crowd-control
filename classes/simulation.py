@@ -188,7 +188,7 @@ def calculate_lane_formation(corridor, N):
     for row in range(corridor.len_x):
         counter_left = np.count_nonzero(value_array[row] == -1)
         counter_right = np.count_nonzero(value_array[row] == 1)
-        if counter_left + counter_right > 0:
+        if counter_left >1 or counter_right > 1:
             phi += ((counter_left - counter_right)**2/(counter_left + counter_right))/N
     return phi
 
