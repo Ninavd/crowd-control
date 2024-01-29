@@ -4,6 +4,7 @@ from numpy import ndarray
 from collections import defaultdict
 import random 
 import copy
+import scipy.stats as stats
 
 from classes.lattice import Lattice
 from classes.cell import Cell
@@ -25,7 +26,7 @@ class Simulation:
         self.corridor : Lattice = copy.deepcopy(corridor)
         self.corridor.load_neighbours()
         self.populated_cells : ndarray[Cell] = self.corridor.get_populated_cells()
-    
+
     def find_target_cell(self, cell: Cell) -> Cell | None:
         """
         Finds the target cell for a given cell while considering boundary conditions.
@@ -123,7 +124,7 @@ class Simulation:
         for i in range(self.iters):
             
             print(f'iteration {i+1}/{self.iters}     ', end='\r') if print_progress else None
-
+            
             # update all cells
             self.iteration()
 
@@ -146,6 +147,10 @@ class Simulation:
                 plt.plot(list(range(i + 1)), phi_values[0:i+1], 'k-')
                 plt.pause(0.005)
                 plt.clf()
+           
+            if i > 1200:
+                linreg = stats.linregress([np.linspace(0, 999, 1000), phi_values[-1000:]])
+                print(linreg.pvalue)
 
         plt.ioff() if animate else None
 
@@ -197,7 +202,7 @@ def calculate_lane_formation(corridor, N):
     for row in range(corridor.len_x):
         counter_left = np.count_nonzero(value_array[row] == -1)
         counter_right = np.count_nonzero(value_array[row] == 1)
-        if counter_left >1 or counter_right > 1:
+        if counter_left > 1 or counter_right > 1:
             phi += ((counter_left - counter_right)**2/(counter_left + counter_right))/N
     return phi
 
