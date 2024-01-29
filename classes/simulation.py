@@ -173,6 +173,10 @@ class Simulation:
             plt.savefig(f'./results/L_{self.corridor.len_x}_rho_{density}.png')
 
 def calculate_phi_0(len_x, len_y, N):
+    '''
+    This function calculates phi_0 = the normalization factor for 
+    "degree of lane formation". 
+    '''
     phi_randoms = np.zeros(100)
     for j in range(0,100):
         corridor = Lattice(len_x, len_y)
@@ -183,6 +187,11 @@ def calculate_phi_0(len_x, len_y, N):
 
 
 def calculate_lane_formation(corridor, N):
+    '''
+    This function calculates the objective function for lane formation
+    Input: Object = corridor, N = number of agents
+    Output: 0 < phi < 1
+    '''
     phi = 0
     value_array = get_value_array(corridor.cells)
     for row in range(corridor.len_x):
