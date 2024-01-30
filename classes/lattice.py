@@ -50,7 +50,7 @@ class Lattice:
         random_y = random.randint(0, self.len_y - 1)
         return self.cells[random_x, random_y]
 
-    def get_random_empty_edge_cell(self, y, x):
+    def get_random_empty_edge_cell(self, y, x, p):
         """
         Find unpopulated cell on opposite edge around same row number. 
         Return it if it exists, else None.
@@ -60,7 +60,7 @@ class Lattice:
             x_list.remove(-1)
         
         for x_n in x_list:
-            if x_n == x and self.cells[x_n, y].is_empty() and random.random() <= 1:
+            if x_n == x and self.cells[x_n, y].is_empty() and random.random() <= p:
                 return self.cells[x_n, y]
 
         random.shuffle(x_list)

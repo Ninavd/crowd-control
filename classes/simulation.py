@@ -13,7 +13,7 @@ from helpers import get_value_array
 
 class Simulation:
 
-    def __init__(self, iters, corridor):
+    def __init__(self, iters, corridor, p=1):
         """
         Initializes simulation object.
         N (int)            - Total nr of people in the corridor.
@@ -26,6 +26,7 @@ class Simulation:
         self.corridor : Lattice = copy.deepcopy(corridor)
         self.corridor.load_neighbours()
         self.populated_cells : ndarray[Cell] = self.corridor.get_populated_cells()
+        self.p = p
 
     def find_target_cell(self, cell: Cell) -> Cell | None:
         """
@@ -35,12 +36,12 @@ class Simulation:
         # check periodic boundary conditions
         if cell.is_leaving_left():
             new_y = self.corridor.len_y - 1
-            return self.corridor.get_random_empty_edge_cell(new_y, x=cell.x)
+            return self.corridor.get_random_empty_edge_cell(new_y, x=cell.x, p=self.p)
         elif cell.is_leaving_right(self.corridor.len_y):
-            return self.corridor.get_random_empty_edge_cell(y=0, x=cell.x)
+            return self.corridor.get_random_empty_edge_cell(y=0, x=cell.x, p=self.p)
         
         # cell is not a boundary cell
-        return cell.get_best_neighbor()
+        return cell.get_best_neighbor(self.p)
 
     def resolve_conflicts(self, next_cells):
         """
@@ -56,10 +57,9 @@ class Simulation:
             if len(candidates) == 1:
                 cell_assigned[target] = candidates[0]
             else:
-                for _ in range(len(candidates) - 2):
+                for _ in range(len(candidates) - 1):
                     loser = candidates.pop(random.randint(0, len(candidates) - 1))
                     cell_assigned[(loser.x, loser.y)] = loser
-                    
                 winner = candidates[0]
                 cell_assigned[target] = winner
         

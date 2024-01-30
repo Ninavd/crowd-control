@@ -8,7 +8,7 @@ from classes.simulation import Simulation
 from helpers import build_and_save_animation
 
 
-def main(density, iterations, runs, L, animate, save_video, save_results):
+def main(density, iterations, runs, L, animate, save_video, save_results, p):
     
     N = int(density * L * L)
     
@@ -16,7 +16,7 @@ def main(density, iterations, runs, L, animate, save_video, save_results):
     corridor.populate_corridor(N)
 
     for i in range(runs):
-        simulation = Simulation(iterations, corridor)
+        simulation = Simulation(iterations, corridor, p=p)
         images, phi_values = simulation.run(animate=animate, save_video=save_video)
 
         if save_video:
@@ -41,6 +41,7 @@ if __name__ == '__main__':
     parser.add_argument("iterations", help="number of timesteps executed per run", default=250, type=int)
     parser.add_argument("-n", "--runs", help="number of runs", default=1, type=int)
     parser.add_argument("-s", "--size", help="size of the L x L lattice", default=50, type=int)
+    parser.add_argument("-p", help="likeliness of trying to move straight forward", default=1, type=float)
 
     parser.add_argument("-v", "--animate", action="store_true", help="visualize the simulation while running")
     parser.add_argument("--save_video", action="store_true", help="save simulation visuals to mp4")
@@ -52,8 +53,10 @@ if __name__ == '__main__':
     # print error if arguments invalid, else run main with provided arguments
     if args.density > 1 or args.density < 0:
         print("Density must lie between 0 and 1.")
+    elif abs(args.p) > 1:
+        print('p is a probability, must lie between 0 and 1.')
     else:
         main(
             args.density, args.iterations, args.runs, args.size, 
-            args.animate, args.save_video, args.save_results
+            args.animate, args.save_video, args.save_results, args.p
             )   

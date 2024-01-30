@@ -68,7 +68,7 @@ class Cell:
         boolean_array = is_empty_vectorized(self.neighbors)
         return np.array(self.neighbors)[boolean_array]
     
-    def get_best_neighbor(self) -> object | None:
+    def get_best_neighbor(self, p) -> object | None:
         """
         Find neighbor cell with smallest distance to the relevant exit.
         Only looks at empty cells for now. 
@@ -105,7 +105,7 @@ class Cell:
 
             if neighbor.x == self.x:
                 
-                if random.random() < 1:
+                if random.random() < p:
                     return neighbor
                 
                 np.delete(empty_neighbors, i)
