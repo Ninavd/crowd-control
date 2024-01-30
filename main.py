@@ -25,7 +25,7 @@ def main(density, iterations, runs, L, animate, save_video, save_results, p):
         if save_results:
             simulation.plot_results(phi_values, save=True)
             df = pd.DataFrame({'phi':phi_values})
-            output_file = f'./results/run_{i}_rho_{density}_L_{L}_iters_{iterations}.csv'
+            output_file = f'./results/run_{i}_p_{p}_rho_{density}_L_{L}_iters_{iterations}.csv'
             df.to_csv(output_file)
             print(f"Results written to {output_file}")
 
