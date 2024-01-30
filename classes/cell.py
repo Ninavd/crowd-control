@@ -88,6 +88,12 @@ class Cell:
         if distances.min() >= current_distance:
             return None 
         
+        # TODO: choose smallest distance first ofzo
+        # # min_dist_neighbors = empty_neighbors[distances == distances.min()]
+        # min_distance_count = sum(distances[distances == distances.min()])
+        # if min_distance_count == 1 and random.random() < 0.8:
+        #     return empty_neighbors[distances == distances.min()][0]
+  
         # only consider neighbors with smaller distance to exit
         empty_neighbors = empty_neighbors[distances < current_distance]
 
@@ -99,7 +105,7 @@ class Cell:
 
             if neighbor.x == self.x:
                 
-                if random.random() < 0.8:
+                if random.random() < 1:
                     return neighbor
                 
                 np.delete(empty_neighbors, i)

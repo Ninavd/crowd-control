@@ -56,14 +56,22 @@ class Lattice:
         Return it if it exists, else None.
         """
         x_list = [i for i in range(x-1, x+2)]
+        if -1 in x_list:
+            x_list.remove(-1)
+        
+        for x_n in x_list:
+            if x_n == x and self.cells[x_n, y].is_empty() and random.random() <= 1:
+                return self.cells[x_n, y]
+
         random.shuffle(x_list)
 
-        for x in x_list:
+        for x_n in x_list:
             
             # exception for corner cells
             try:
-                if self.cells[x, y].is_empty():
-                    return self.cells[x, y] 
+                if self.cells[x_n, y].is_empty():
+                    return self.cells[x_n, y] 
+                
             except IndexError: 
                 pass  
 
@@ -83,7 +91,7 @@ class Lattice:
         assert N <= self.cells.size, 'Number of people is larger than number of cells'
         
         for _ in range(N):
-            value = 1 if random.random() < 0.5 else -1
+            value = 1  if random.random() < 0.5 else -1
             self.populate_random_cell(value)
 
     def populate_random_cell(self, value):
