@@ -1,8 +1,8 @@
 import numpy as np
 import random 
 
-get_distance_array = lambda cell, value : cell.left_exit_distance if value < 0 else cell.right_exit_distance
-get_distance_array = np.vectorize(get_distance_array)
+from numpy import ndarray
+from helpers import get_distance_array, is_empty_vectorized
 
 class Cell:
 
@@ -14,52 +14,61 @@ class Cell:
         self.y = y
         self.neighbors: list[Cell] = []  
        
-    def is_empty(self):
+    def is_empty(self) -> bool:
+        """
+        Return True if cell is unpopulated, False otherwise.
+        """
         return True if self.value == 0 else False
 
-    def populate(self, value):
+    def is_leaving_left(self):
+        """
+        Returns True if agent is about to leave lattice on the left.
+        """
+        return self.y == 0 and self.value == -1
+
+    def is_leaving_right(self, len_y):
+        """
+        Returns True if agent is about to leave lattice on the right.
+        """
+        return self.y == len_y - 1 and self.value == 1
+
+    def populate(self, value) -> None:
         """
         Populate a cell if it is not empty.
         """
-        assert value in [-1, 1]
-
-        if self.value != 0:
-            return False
+        assert value in [-1, 1], 'value must be 1 or -1'
+        assert self.value == 0, 'can not populate un-empty cell'
         
         self.value = value
-        return True
     
-    def clear(self):
+    def clear(self) -> None:
         """
         Empty the cell.
         """
         self.value = 0
     
-    def add_neighbor(self, cell):
+    def add_neighbor(self, cell) -> None:
         """
         Add neighbouring cell object.
         """
-        assert len(self.neighbors) < 10, 'max number of neighbors exceeded.'
+        assert len(self.neighbors) < 9, 'max number of neighbors exceeded.'
 
         self.neighbors.append(cell)
 
-    def get_distance_value(self, value):
+    def get_distance_value(self, value) -> int:
         """
         Get the correct distance value based on who is asking.
         """
         return self.right_exit_distance if value > 0 else self.left_exit_distance
     
-    def get_empty_neighbors(self):
+    def get_empty_neighbors(self) -> ndarray[object]:
         """
-        Return empty neighbors in array
+        Return empty neighbors in array.
         """
-        empty_neighbors = []
-        for neighbor in self.neighbors:
-            if neighbor.is_empty():
-                empty_neighbors.append(neighbor)
-        return np.array(empty_neighbors)
-        
-    def get_best_neighbor(self):
+        boolean_array = is_empty_vectorized(self.neighbors)
+        return np.array(self.neighbors)[boolean_array]
+    
+    def get_best_neighbor(self, p) -> object | None:
         """
         Find neighbor cell with smallest distance to the relevant exit.
         Only looks at empty cells for now. 
@@ -71,34 +80,48 @@ class Cell:
         if len(empty_neighbors) == 0:
             return None
         
+        # find distance values of all neighbors
         distances = get_distance_array(empty_neighbors, self.value)
-
-        minimum = distances.min()
         current_distance = self.get_distance_value(self.value)
 
-        # TODO: Choose center cell with high probability, diagonal cells with a lower one.
-
         # if no better cells, stay where you are
-        if minimum >= current_distance:
+        if distances.min() >= current_distance:
             return None 
         
-        # pick a random cell with lower distance
-        options = list(np.where(distances < current_distance)[0])
-            
+        # TODO: choose smallest distance first ofzo
+        # # min_dist_neighbors = empty_neighbors[distances == distances.min()]
+        # min_distance_count = sum(distances[distances == distances.min()])
+        # if min_distance_count == 1 and random.random() < 0.8:
+        #     return empty_neighbors[distances == distances.min()][0]
+  
+        # only consider neighbors with smaller distance to exit
+        empty_neighbors = empty_neighbors[distances < current_distance]
 
-        if len(options) == 1:
-            return empty_neighbors[options[0]]
+        if len(empty_neighbors) == 1:
+            return empty_neighbors[0]
 
-        for index in options:
-            neighbor = empty_neighbors[index]
+        # check for horizontal neighbors, move there with given probability
+        for i, neighbor in enumerate(empty_neighbors):
 
             if neighbor.x == self.x:
                 
-                if random.random() < 0.8:
+                if random.random() < p:
                     return neighbor
                 
-                options.remove(index)
-                # np.delete(empty_neighbors, index)
+                np.delete(empty_neighbors, i)
         
-        best_index = random.choice(options)
-        return empty_neighbors[best_index]
+        # otherwise target a diagonal cell
+        return np.random.choice(empty_neighbors)
+    
+    def lower_distance_to_exit(self):
+        '''
+        This function lowers the value of the distance to the exit
+        In an effort to create a dynamic floorplan in which
+        people prefer behind someone else because the probability
+        of collisions is lower.
+        '''
+        if self.value < 0:
+            self.left_exit_distance += -0.00001
+
+        elif self.value > 0:
+            self.right_exit_distance += -0.00001
