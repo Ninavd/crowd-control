@@ -15,6 +15,8 @@ def main(density, iterations, runs, L, animate, save_video, save_results, p):
     corridor = Lattice(L, L)
     corridor.populate_corridor(N)
 
+    results = np.zeros((runs, iterations)) if save_results else None
+
     for i in range(runs):
         simulation = Simulation(iterations, corridor, p=p)
         images, phi_values = simulation.run(animate=animate, save_video=save_video)
@@ -24,13 +26,17 @@ def main(density, iterations, runs, L, animate, save_video, save_results, p):
         
         if save_results:
             simulation.plot_results(phi_values, save=True)
-            df = pd.DataFrame({'phi':phi_values})
-            output_file = f'./results/run_{i}_rho_{density}_L_{L}_iters_{iterations}.csv'
-            df.to_csv(output_file)
-            print(f"Results written to {output_file}")
-
-
+            results[i] = phi_values
         
+    if save_results:
+        mean_phi_values = np.mean(results, axis=0)
+        std_phi_values = np.std(results, axis=0)
+        df = pd.DataFrame({'mean_phi':mean_phi_values, 'std':std_phi_values})
+
+        output_file = f'./results/runs_{runs}_p_{p}_rho_{density}_L_{L}_iters_{iterations}.csv'
+        df.to_csv(output_file)
+        print(f"Results written to {output_file}")
+
 if __name__ == '__main__':
 
     # set-up parsing command line arguments
