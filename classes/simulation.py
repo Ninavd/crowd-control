@@ -120,7 +120,7 @@ class Simulation:
         phi_0 = calculate_phi_0(self.corridor.len_x, self.corridor.len_y, self.N)
         print('phi_0: ', phi_0)
         phi_values = np.zeros(self.iters)
-
+        
         for i in range(self.iters):
             
             print(f'iteration {i+1}/{self.iters}     ', end='\r') if print_progress else None
@@ -131,7 +131,7 @@ class Simulation:
             phi = calculate_lane_formation(self.corridor, self.N)
             phi_reduced = (phi-phi_0)/(1-phi_0)
             phi_values[i] = phi_reduced
-            
+
             if save_video == True:
                 images.append(get_value_array(self.corridor.cells))
 
@@ -147,10 +147,6 @@ class Simulation:
                 plt.plot(list(range(i + 1)), phi_values[0:i+1], 'k-')
                 plt.pause(0.005)
                 plt.clf()
-           
-            if i > 1200:
-                linreg = stats.linregress([np.linspace(0, 999, 1000), phi_values[-1000:]])
-                print(linreg.pvalue)
 
         plt.ioff() if animate else None
 
