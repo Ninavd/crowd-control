@@ -4,6 +4,7 @@ from numpy import ndarray
 from collections import defaultdict
 import random 
 import copy
+import scipy.stats as stats
 
 from classes.lattice import Lattice
 from classes.cell import Cell
@@ -25,7 +26,7 @@ class Simulation:
         self.corridor : Lattice = copy.deepcopy(corridor)
         self.corridor.load_neighbours()
         self.populated_cells : ndarray[Cell] = self.corridor.get_populated_cells()
-    
+
     def find_target_cell(self, cell: Cell) -> Cell | None:
         """
         Finds the target cell for a given cell while considering boundary conditions.
@@ -119,18 +120,18 @@ class Simulation:
         phi_0 = calculate_phi_0(self.corridor.len_x, self.corridor.len_y, self.N)
         print('phi_0: ', phi_0)
         phi_values = np.zeros(self.iters)
-
+        
         for i in range(self.iters):
             
             print(f'iteration {i+1}/{self.iters}     ', end='\r') if print_progress else None
-
+            
             # update all cells
             self.iteration()
 
             phi = calculate_lane_formation(self.corridor, self.N)
             phi_reduced = (phi-phi_0)/(1-phi_0)
             phi_values[i] = phi_reduced
-            
+
             if save_video == True:
                 images.append(get_value_array(self.corridor.cells))
 
@@ -197,7 +198,7 @@ def calculate_lane_formation(corridor, N):
     for row in range(corridor.len_x):
         counter_left = np.count_nonzero(value_array[row] == -1)
         counter_right = np.count_nonzero(value_array[row] == 1)
-        if counter_left >1 or counter_right > 1:
+        if counter_left > 1 or counter_right > 1:
             phi += ((counter_left - counter_right)**2/(counter_left + counter_right))/N
     return phi
 
