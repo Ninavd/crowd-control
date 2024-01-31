@@ -1,7 +1,7 @@
 #!/bin/bash
 
 rho_values=(0.18 0.20)
-p_values = (0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0)
+p_values=(0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0)
 
 for rho in "${rho_values[@]}"
 do
