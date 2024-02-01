@@ -4,7 +4,6 @@ from numpy import ndarray
 from collections import defaultdict
 import random 
 import copy
-import scipy.stats as stats
 
 from classes.lattice import Lattice
 from classes.cell import Cell
@@ -127,7 +126,8 @@ class Simulation:
             
             # update all cells
             self.iteration()
-
+            
+            # update order parameter
             phi = calculate_lane_formation(self.corridor, self.N)
             phi_reduced = (phi-phi_0)/(1-phi_0)
             phi_values[i] = phi_reduced
