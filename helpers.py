@@ -55,6 +55,8 @@ def final_phi_value(runs, p_values, rho_values, iterations, L):
     CI_int = np.zeros((len(p_values), len(rho_values), len(runs), iterations, 2))
     significance = np.zeros((len(p_values), len(rho_values), len(runs), iterations))
     phi_value_act = np.zeros((len(p_values), len(rho_values), len(runs)))
+    CI_output = np.zeros((len(p_values), len(rho_values), len(runs), iterations, 2))
+    CI_output_act = np.zeros((len(p_values), len(rho_values), len(runs), 2))
 
     for p_ix, p_value in enumerate(p_values):
         for rho_ix, rho_value in enumerate(rho_values):
@@ -68,7 +70,9 @@ def final_phi_value(runs, p_values, rho_values, iterations, L):
                         slope, intercept, r_value, significance[p_ix, rho_ix, int(run), i], se = stats.linregress(list([np.linspace(0, 999, 1000), phi_values[i-500:i+500]]))
                         mean[p_ix, rho_ix, int(run), i] = np.mean(phi_values[i-500:i+500])
                         CI_int[p_ix, rho_ix, int(run), i] = np.percentile(phi_values[i-500:i+500], [5, 100])
-            
+                        CI_output[p_ix, rho_ix, int(run), i] = np.percentile(phi_values[i-500:i+500], [2.5, 97.5])
+
+
                 for i in range(iterations):
                     if i > 1000 and i < 4500:
                         # If the slope is not distinguishable from 0
@@ -98,5 +102,7 @@ def final_phi_value(runs, p_values, rho_values, iterations, L):
 
                 # Save the phi_value that respresents a point in our 3D plot.
                 phi_value_act[p_ix, rho_ix, int(run)] = mean[p_ix, rho_ix, int(run), actual_index]
+                CI_output_act[p_ix, rho_ix, int(run)] = CI_output[p_ix, rho_ix, int(run), actual_index]
 
-    return phi_value_act
+
+    return phi_value_act, CI_output_act
