@@ -2,7 +2,7 @@ import numpy as np
 from matplotlib import pyplot as plt 
 import numpy as np 
 import matplotlib.animation as animation
-
+import scipy.stats as stats
 
 def get_neighbor_coords(x, y, len_x, len_y):
     """"
@@ -50,4 +50,53 @@ def build_and_save_animation(data_frames, title, iterations):
     anim.save(f'simulation_videos/{title}.mp4', writer=writervideo) 
     plt.close()
 
+def final_phi_value(runs, p_values, rho_values, iterations, L):
+    mean = np.zeros((len(p_values), len(rho_values), len(runs), iterations))
+    CI_int = np.zeros((len(p_values), len(rho_values), len(runs), iterations, 2))
+    significance = np.zeros((len(p_values), len(rho_values), len(runs), iterations))
+    phi_value_act = np.zeros((len(p_values), len(rho_values), len(runs)))
 
+    for p_ix, p_value in enumerate(p_values):
+        for rho_ix, rho_value in enumerate(rho_values):
+            for run in runs:
+                counter1 = np.zeros(iterations)
+                phi_values = np.genfromtxt(f'./results/raw_data/run_{int(run)}_p_{p_value}_rho_{rho_value}_L_{L}_iters_{iterations}.csv', delimiter = ',', skip_header=1)
+                phi_values = phi_values[:,1]
+                phi_values = phi_values
+                for i in range(iterations):
+                    if i > 1000 and i < 4000:
+                        slope, intercept, r_value, significance[p_ix, rho_ix, int(run), i], se = stats.linregress(list([np.linspace(0, 1999, 2000), phi_values[i-1000:i+1000]]))
+                        mean[p_ix, rho_ix, int(run), i] = np.mean(phi_values[i-1000:i+1000])
+                        CI_int[p_ix, rho_ix, int(run), i] = np.percentile(phi_values[i-1000:i+1000], [1, 100])
+            
+                for i in range(iterations):
+                    if i > 1000 and i < 4000:
+                        # If the slope is not distinguishable from 0
+
+                        if significance[p_ix, rho_ix, int(run), i] > 0.05:
+                            counter0 = 0
+                            # Count number of outliers seen by iteration i
+                            for j in range(2000):
+                                if phi_values[i+j-999] < CI_int[p_ix, rho_ix, int(run), i, 0]:
+                                    counter0 += 1
+                            counter1[i] = counter0
+                        else:
+                            counter1[i] = 9999
+                    else:
+                        counter1[i] = 9999
+            
+                # Find the last index that saw the least amount of outliers
+                counter1_inv = counter1[::-1]
+                min_value_teller = np.min(counter1_inv)
+                index_min_val = list(counter1_inv).index(min_value_teller)
+                actual_index = iterations - index_min_val - 1
+
+                if counter1[actual_index] == 9999:
+                    print(f'Error: for p = {p_value}, rho = {rho_value}, run = {run}, there is no steady state measured. \n \
+                        We should probably lower the range of intervals we include in the linear regression \n \
+                        or make the lower percentile boundary higher')
+
+                # Save the phi_value that respresents a point in our 3D plot.
+                phi_value_act[p_ix, rho_ix, int(run)] = mean[p_ix, rho_ix, int(run), actual_index]
+
+    return phi_value_act
