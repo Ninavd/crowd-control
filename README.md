@@ -8,7 +8,7 @@ When running main.py, there are several commands that can be added.
 
 
 # Contributors 
-This project was executed by the following students:\
+The following students collaborated on this project:\
 Joanna Costa e Silva\
 Guido Hanegraaf\
 Nina van der Meulen\ 
