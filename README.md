@@ -12,4 +12,4 @@ The following students collaborated on this project:\
 Joanna Costa e Silva\
 Guido Hanegraaf\
 Nina van der Meulen\ 
-Kevin Schaaf\
+Kevin Schaaf
