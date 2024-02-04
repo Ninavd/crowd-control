@@ -1,6 +1,5 @@
 import argparse
 import numpy as np
-import scipy.stats as stats
 import pandas as pd
 
 from classes.lattice import Lattice
@@ -9,9 +8,19 @@ from helpers import build_and_save_animation
 
 
 def main(density, iterations, runs, L, animate, save_video, save_results, p):
-    
+    """
+    Allows running simulations via the CLI. 
+
+    Args:
+        density (float): Normalized density of the crowd in the lattice.
+        iterations (int): Number of iterations used per run.
+        runs (int): Number of runs.
+        L (int): Integer size of LxL lattice.
+        save_video (bool): Stores mp4 of simulation if true.
+        save_results (bool): Stores results per run and average results of simulation.
+        p (float): Drunkness parameter, probability of moving straight. 
+    """
     N = int(density * L * L)
-    
     corridor = Lattice(L, L)
     corridor.populate_corridor(N)
 
