@@ -80,8 +80,8 @@ options:
 
 ## Contributors 
 The following students collaborated on this project:
-- Joanna Costa e Silva [@Joana-CSilva29](https://github.com/Joana-CSilva29)
-- Guido Hanegraaf [@guidohanegraaf1](https://github.com/guidohanegraaf1)
-- Nina van der Meulen [@Ninavd](https://github.com/Ninavd)
-- Kevin Schaaf [@Ksf900](https://github.com/Ksf900)
+- Joanna Costa e Silva ([@Joana-CSilva29](https://github.com/Joana-CSilva29))
+- Guido Hanegraaf ([@guidohanegraaf1](https://github.com/guidohanegraaf1))
+- Nina van der Meulen ([@Ninavd](https://github.com/Ninavd))
+- Kevin Schaaf ([@Ksf900](https://github.com/Ksf900))
 
