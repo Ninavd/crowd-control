@@ -121,14 +121,14 @@ class Lattice:
         return cell
     
     def populate_cell(self, cell, value):
-        '''
+        """
         Populate cell with a left or right-moving individual if it is empty.
         Return True if successful, else False.
 
         Args:
             cell (Cell): Cell to populate.
             value (int): Decides if cell is populated by right-mover or left-mover.
-        '''
+        """
         assert isinstance(value, int) and value in [-1, 1]
 
         if not cell.is_empty():
