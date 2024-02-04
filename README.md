@@ -48,6 +48,7 @@ This project is part of the 2024 Complex System Simulation course at the UvA. A 
 ```
 
 ## Installation
+This module requires at least Python 3.10.8
 
 1. Clone the repository:
 ```bash
