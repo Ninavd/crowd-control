@@ -53,7 +53,10 @@ This project is part of the 2024 Complex System Simulation course at the UvA. A 
 ```bash
 git clone https://github.com/Ninavd/crowd-control.git
 ```
-2. Change directory to the cloned repository.
+2. Navigate to the cloned repository.
+```
+cd ./crowd-control/
+```
 3. Install the required dependencies:
 ```bash
 pip install -r requirements.txt
