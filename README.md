@@ -1,6 +1,6 @@
 # Pedestrian Counterflow: Investigating Lane formation through Cellular Automata dynamics
 
-![Image](finalsnapshot_example.png)
+![Image](results/final_snapshots/finalsnapshot_example.png)
 
 ## Table of Contents
 
