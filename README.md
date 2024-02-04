@@ -15,7 +15,7 @@ The following students collaborated on this project:
 * [Project Structure](#project-structure)
 * [Installation](#installation)
 * [Instructions CLI](#instructions-command-line-interface)
-* [Licensing](#license)
+* [Licensing](#licensing)
 
 ## Introduction
 
