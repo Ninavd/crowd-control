@@ -2,16 +2,24 @@
 
 ![Image](results/final_snapshots/finalsnapshot_example.png)
 
+## Contributors 
+The following students collaborated on this project:
+- Joanna Costa e Silva ([@Joana-CSilva29](https://github.com/Joana-CSilva29))
+- Guido Hanegraaf ([@guidohanegraaf1](https://github.com/guidohanegraaf1))
+- Nina van der Meulen ([@Ninavd](https://github.com/Ninavd))
+- Kevin Schaaf ([@Ksf900](https://github.com/Ksf900))
+
 ## Table of Contents
 
 * [Introduction](#introduction)
 * [Project Structure](#project-structure)
 * [Installation](#installation)
 * [Instructions CLI](#instructions-command-line-interface)
+* [Licensing](#licensing)
 
 ## Introduction
 
-This project is part of the Complex System Simulation course at the UvA. A 2D Cellular Automata system is used to simulate a corridor containing two crowds of people, moving in opposite ways. The goal is to investigate the emergent phenomenon of lane formation and it's dependance on several parameters. 
+This project is part of the 2024 Complex System Simulation course at the UvA. A 2D Cellular Automata system is used to simulate a corridor containing two crowds of people, trying to reach the opposite side of an infinite corridor. The goal is to investigate the emergent phenomenon of lane formation and its dependance on several parameters. Simulations can be visualized in real time or saved to mp4 and csv files. Documentation of this module, generated with pydoc, can be found [here](https://ninavd.github.io/crowd-control/).
 
 ## Project Structure
 
@@ -21,36 +29,46 @@ This project is part of the Complex System Simulation course at the UvA. A 2D Ce
 │   └── ...
 │
 ├── classes/              # CLASSES
-│   ├── __init__.py     # Initialisation
-│   ├── cell.py         # Handling cells in the lattice
-│   ├── lattice.py         # Handling the lattice itself
-│   └── simulation.py       # Handling the simulation
+│   ├── __init__.py     
+│   ├── cell.py            # Class representing cells in the lattice
+│   ├── lattice.py         # Class representing the lattice itself
+│   └── simulation.py      # Class handling the simulation
 │
-├── results/                   # RESULTS
-│   ├── data                # Averages over multiple runs
-│   ├── final_snapshots        # Image of the final iteration of every run
-│   └── raw_data            # Each individual run 
+├── results/                 # RESULTS
+│   ├── data/                # Averages over multiple runs
+│   ├── final_snapshots/     # Images of the final iteration for every run
+│   └── raw_data/            # Save files of each individual run 
 │   
 ├── helpers.py              # Helper functions
 ├── main.py                 # Handles CLI use (see below)
-├── data_analysis.ipynb              # Handling analysis of the data
-├── Analysis2.ipynb                # Handling analysis of the data
-│
+├── data_analysis.ipynb     # Contains analysis and plots of the data
 ├── LICENSE
 ├── README.md
 └── requirements.txt
 ```
 
 ## Installation
+This module requires at least Python 3.10.8
 
 1. Clone the repository:
 ```bash
 git clone https://github.com/Ninavd/crowd-control.git
 ```
-2. Change directory to the cloned repository.
+2. Navigate to the cloned repository.
+```
+cd ./crowd-control/
+```
 3. Install the required dependencies:
 ```bash
 pip install -r requirements.txt
+```
+4. Create a simulation_videos dir if you wish to save videos
+```bash
+mkdir simulation_videos
+```
+5. Install ffmpeg
+```bash
+sudo apt-get install ffmpeg
 ```
 
 ## Instructions Command-Line Interface
@@ -70,18 +88,19 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  -n RUNS, --runs RUNS  number of runs
-  -s SIZE, --size SIZE  size of the L x L lattice
-  -p P                  likeliness of trying to move straight forward
-  -v, --animate         visualize the simulation while running
-  --save_video          save simulation visuals to mp4
-  --save_results        store all data in a csv for each simulation/run
+  -n RUNS, --runs RUNS  number of runs (default = 1)
+  -s SIZE, --size SIZE  size of the L x L lattice (default = 50)
+  -p P                  likeliness of trying to move straight forward (default = 1)
+  -v, --animate         visualize the simulation while running (default = False)
+  --save_video          save simulation visuals to mp4 (default = False)
+  --save_results        store all data in a csv for each simulation/run (default = False)
+```
+**Example Usage**
+
+The following command runs one simulation with 200 iterations on a 50x50 lattice with a crowd density of 0.18, visualizing the simulation in real time, saving a video to mp4 after completion in the `simulation_videos/` folder.
+```bash
+python3 main.py 0.18 200 -v --save_video
 ```
 
-## Contributors 
-The following students collaborated on this project:
-- Joanna Costa e Silva ([@Joana-CSilva29](https://github.com/Joana-CSilva29))
-- Guido Hanegraaf ([@guidohanegraaf1](https://github.com/guidohanegraaf1))
-- Nina van der Meulen ([@Ninavd](https://github.com/Ninavd))
-- Kevin Schaaf ([@Ksf900](https://github.com/Ksf900))
-
+## Licensing
+This project is licensed under the [MIT License](LICENSE) - see the [LICENSE.md](LICENSE) file for details.
