@@ -137,5 +137,20 @@ class Lattice:
         cell.populate(value)
         return True
     
+    def calculate_lane_formation(self):
+        """
+        Calculates the objective function for lane formation.
+        Returns phi, a number between zero and one.
+        """
+        phi = 0
+        N = len(self.get_populated_cells())
+        value_array = get_value_array(self.cells)
+        for row in range(self.len_x):
+            counter_left = np.count_nonzero(value_array[row] == -1)
+            counter_right = np.count_nonzero(value_array[row] == 1)
+            if counter_left > 1 or counter_right > 1:
+                phi += ((counter_left - counter_right)**2/(counter_left + counter_right))/N
+        return phi
+
     def __str__(self) -> str:
         return f'{get_distance_array(self.cells, 1)}'
