@@ -213,7 +213,7 @@ class Simulation:
 
         if save:
             density = self.N / (self.corridor.len_x * self.corridor.len_y)
-            plt.savefig(f'./results/L_{self.corridor.len_x}_rho_{density}_p_{self.p}.png')
+            plt.savefig(f'./results/final_snapshots/L_{self.corridor.len_x}_rho_{density}_p_{self.p}.png')
 
 def calculate_phi_0(len_x, len_y, N):
     """
