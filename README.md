@@ -99,4 +99,4 @@ python3 main.py 0.18 200 -v --save_video
 ```
 
 ## Licensing
-This project is licensed under the [MIT License](LICENSE.md) - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the [MIT License](LICENSE) - see the [LICENSE.md](LICENSE) file for details.
