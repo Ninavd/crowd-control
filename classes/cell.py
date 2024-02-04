@@ -29,7 +29,6 @@ class Cell:
             left_exit_distance (float):  Distance to leftt side of corridor.
             right_exit_distance (float): Distance to right side of corridor.
         """
-        
         self.value = 0
         self.left_exit_distance = left_exit_distance
         self.right_exit_distance = right_exit_distance
