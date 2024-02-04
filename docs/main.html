@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>crowd-control.main API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>crowd-control.main</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import argparse
+import numpy as np
+import pandas as pd
+
+from classes.lattice import Lattice
+from classes.simulation import Simulation
+from helpers import build_and_save_animation
+
+
+def main(density, iterations, runs, L, animate, save_video, save_results, p):
+    &#34;&#34;&#34;
+    Allows running simulations via the CLI. 
+
+    Args:
+        density (float): Normalized density of the crowd in the lattice.
+        iterations (int): Number of iterations used per run.
+        runs (int): Number of runs.
+        L (int): Integer size of LxL lattice.
+        save_video (bool): Stores mp4 of simulation if true.
+        save_results (bool): Stores results per run and average results of simulation.
+        p (float): Drunkness parameter, probability of moving straight. 
+    &#34;&#34;&#34;
+    N = int(density * L * L)
+    corridor = Lattice(L, L)
+    corridor.populate_corridor(N)
+
+    results = np.zeros((runs, iterations)) if save_results else None
+
+    for i in range(runs):
+        simulation = Simulation(iterations, corridor, p=p)
+        images, phi_values = simulation.run(animate=animate, save_video=save_video)
+
+        if save_video:
+            build_and_save_animation(images, f&#39;rho_{density}&#39;, iterations)
+        
+        if save_results:
+            simulation.plot_results(phi_values, save=True)
+            results[i] = phi_values
+            df = pd.DataFrame({&#39;phi&#39;:phi_values})
+            output_file = f&#39;./results/raw_data/run_{i}_p_{p}_rho_{density}_L_{L}_iters_{iterations}.csv&#39;
+            df.to_csv(output_file)
+            print(f&#34;Results written to {output_file}&#34;)
+        
+    if save_results:
+        mean_phi_values = np.mean(results, axis=0)
+        std_phi_values = np.std(results, axis=0)
+        df = pd.DataFrame({&#39;mean_phi&#39;:mean_phi_values, &#39;std&#39;:std_phi_values})
+
+        output_file = f&#39;./results/data/runs_{runs}_p_{p}_rho_{density}_L_{L}_iters_{iterations}.csv&#39;
+        df.to_csv(output_file)
+        print(f&#34;Results written to {output_file}&#34;)
+
+if __name__ == &#39;__main__&#39;:
+
+    # set-up parsing command line arguments
+    parser = argparse.ArgumentParser(description=&#34;Simulate lane formation in heterogenic crowds&#34;)
+
+    # adding arguments
+    parser.add_argument(&#34;density&#34;, help=&#34;density of the crowd on the lattice&#34;, default=0.1, type=float)
+    parser.add_argument(&#34;iterations&#34;, help=&#34;number of timesteps executed per run&#34;, default=250, type=int)
+    parser.add_argument(&#34;-n&#34;, &#34;--runs&#34;, help=&#34;number of runs&#34;, default=1, type=int)
+    parser.add_argument(&#34;-s&#34;, &#34;--size&#34;, help=&#34;size of the L x L lattice&#34;, default=50, type=int)
+    parser.add_argument(&#34;-p&#34;, help=&#34;likeliness of trying to move straight forward&#34;, default=1, type=float)
+
+    parser.add_argument(&#34;-v&#34;, &#34;--animate&#34;, action=&#34;store_true&#34;, help=&#34;visualize the simulation while running&#34;)
+    parser.add_argument(&#34;--save_video&#34;, action=&#34;store_true&#34;, help=&#34;save simulation visuals to mp4&#34;)
+    parser.add_argument(&#34;--save_results&#34;, action=&#34;store_true&#34;, help=&#34;store all data in a csv for each simulation/run&#34;)
+
+    # read arguments from command line
+    args = parser.parse_args()
+
+    # print error if arguments invalid, else run main with provided arguments
+    if args.density &gt; 1 or args.density &lt; 0:
+        print(&#34;Density must lie between 0 and 1.&#34;)
+    elif abs(args.p) &gt; 1:
+        print(&#39;p is a probability, must lie between 0 and 1.&#39;)
+    else:
+        main(
+            args.density, args.iterations, args.runs, args.size, 
+            args.animate, args.save_video, args.save_results, args.p
+            )   </code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="crowd-control.main.main"><code class="name flex">
+<span>def <span class="ident">main</span></span>(<span>density, iterations, runs, L, animate, save_video, save_results, p)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Allows running simulations via the CLI. </p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>density</code></strong> :&ensp;<code>float</code></dt>
+<dd>Normalized density of the crowd in the lattice.</dd>
+<dt><strong><code>iterations</code></strong> :&ensp;<code>int</code></dt>
+<dd>Number of iterations used per run.</dd>
+<dt><strong><code>runs</code></strong> :&ensp;<code>int</code></dt>
+<dd>Number of runs.</dd>
+<dt><strong><code>L</code></strong> :&ensp;<code>int</code></dt>
+<dd>Integer size of LxL lattice.</dd>
+<dt><strong><code>save_video</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Stores mp4 of simulation if true.</dd>
+<dt><strong><code>save_results</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Stores results per run and average results of simulation.</dd>
+<dt><strong><code>p</code></strong> :&ensp;<code>float</code></dt>
+<dd>Drunkness parameter, probability of moving straight.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def main(density, iterations, runs, L, animate, save_video, save_results, p):
+    &#34;&#34;&#34;
+    Allows running simulations via the CLI. 
+
+    Args:
+        density (float): Normalized density of the crowd in the lattice.
+        iterations (int): Number of iterations used per run.
+        runs (int): Number of runs.
+        L (int): Integer size of LxL lattice.
+        save_video (bool): Stores mp4 of simulation if true.
+        save_results (bool): Stores results per run and average results of simulation.
+        p (float): Drunkness parameter, probability of moving straight. 
+    &#34;&#34;&#34;
+    N = int(density * L * L)
+    corridor = Lattice(L, L)
+    corridor.populate_corridor(N)
+
+    results = np.zeros((runs, iterations)) if save_results else None
+
+    for i in range(runs):
+        simulation = Simulation(iterations, corridor, p=p)
+        images, phi_values = simulation.run(animate=animate, save_video=save_video)
+
+        if save_video:
+            build_and_save_animation(images, f&#39;rho_{density}&#39;, iterations)
+        
+        if save_results:
+            simulation.plot_results(phi_values, save=True)
+            results[i] = phi_values
+            df = pd.DataFrame({&#39;phi&#39;:phi_values})
+            output_file = f&#39;./results/raw_data/run_{i}_p_{p}_rho_{density}_L_{L}_iters_{iterations}.csv&#39;
+            df.to_csv(output_file)
+            print(f&#34;Results written to {output_file}&#34;)
+        
+    if save_results:
+        mean_phi_values = np.mean(results, axis=0)
+        std_phi_values = np.std(results, axis=0)
+        df = pd.DataFrame({&#39;mean_phi&#39;:mean_phi_values, &#39;std&#39;:std_phi_values})
+
+        output_file = f&#39;./results/data/runs_{runs}_p_{p}_rho_{density}_L_{L}_iters_{iterations}.csv&#39;
+        df.to_csv(output_file)
+        print(f&#34;Results written to {output_file}&#34;)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="crowd-control" href="index.html">crowd-control</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="crowd-control.main.main" href="#crowd-control.main.main">main</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
